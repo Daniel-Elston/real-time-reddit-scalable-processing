@@ -20,12 +20,12 @@ def reddit_creds():
 
 @attr.s
 class Config:
-    write_output: bool = attr.ib(default=True)
     overwrite: bool = attr.ib(default=True)
     save_fig: bool = attr.ib(default=True)
     
     batch_size:int = 5
-    
+    spark_write_mode: str = attr.ib(default="overwrite")
+
     kafka_topic: str = 'reddit_comments'
     subreddit_name: str = 'all'
     group_id: str = 'reddit_consumer_group'

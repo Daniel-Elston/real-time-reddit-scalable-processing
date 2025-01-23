@@ -14,8 +14,14 @@ class PySparkProcessor:
         self, ctx: PipelineContext,
         app_name: str,
     ):
+        self.config: Config = ctx.settings.config
         self.paths: Paths = ctx.paths
-        self.spark = SparkSession.builder.appName(app_name).getOrCreate()
+        self.output_dir = self.paths.get_path("spark-processed")
+        self.spark = (
+            SparkSession.builder
+            .appName(app_name)
+            .getOrCreate()
+        )
 
     @staticmethod
     def define_schema():
@@ -36,14 +42,15 @@ class PySparkProcessor:
             batch_data,
             schema=schema
         )
-        self._show_metadata(df)
-        df.write.mode("overwrite").parquet(str(self.paths.get_path("spark-processed")))
+        # df.show(truncate=False)
+        df.write.mode(self.config.spark_write_mode).parquet(str(self.output_dir))
+        df.unpersist()
+        # self._log_dataframe_info(df)
 
-    def _show_metadata(self, df):
-        df.show(truncate=False)
-        df.printSchema()
-        
-        # logging.info(f"DataFrame Partition Count: {df.rdd.getNumPartitions()}")
-        # logging.info(f"DataFrame Memory Usage: {df.storageLevel}")
-        # logging.debug(f"Saving data to Parquet. N rows: {df.count()}")
+    def _log_dataframe_info(self, df):
+        """Enhanced logging for DataFrame details"""
+        logging.info(f"DataFrame Schema: {df.schema}")
+        logging.info(f"DataFrame Partition Count: {df.rdd.getNumPartitions()}")
+        logging.info(f"Number of Rows: {df.count()}")
+        logging.info(f"Estimated Memory Usage: {df.storageLevel}")
 

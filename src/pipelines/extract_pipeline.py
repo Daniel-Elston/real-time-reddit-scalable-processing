@@ -2,25 +2,20 @@ from __future__ import annotations
 
 import logging
 
+import threading
+
 from config.pipeline_context import PipelineContext
 from utils.execution import TaskExecutor
 from config.settings import Config
 from config.paths import Paths
 
-import signal
 
 from src.etl.extract import Extractor
 from src.etl.produce import Producer
 from src.etl.consume import Consumer
 
 from src.data.pyspark import PySparkProcessor
-
-import threading
-
-import threading
-import signal
-import logging
-import sys
+from src.pipelines.life_cycle_manager import LifeCycleManager
 
 
 class ExtractionPipeline:
@@ -47,50 +42,39 @@ class ExtractionPipeline:
             ctx=ctx,
             app_name="RedditPipeline",
         )
-        self.shutdown_event = threading.Event()
-        self._setup_signal_handling()
-
+        self.lifecycle_manager = LifeCycleManager(
+            spark_processor=self.pyspark_processor,
+            consumer=self.consumer_instance,
+            producer=self.producer
+        )
 
     def extract_real_time_data(self):
         """Process real-time data extraction and processing."""
         send_batch = []
         
         def process_batch(batch_data): 
-            """Pass batch data to PySpark processor."""
+            """Callback for processing individual comments."""
             send_batch.append(batch_data)
-
-            if len(send_batch) >= self.config.batch_size:
-                logging.info(f"Sending batch data to PySpark processor. Batch size: {len(send_batch)}")
-                self.pyspark_processor.process_and_save(send_batch)
-                send_batch.clear()
+            return self._process_streaming_batch(send_batch)
 
         steps = [
             self.consumer_thread.start,
             lambda: self.extractor.stream_comments(callback=process_batch),
             self.consumer_thread.join,
         ]
-        self.exe._execute_steps(steps, stage="parent")
-
-    def _setup_signal_handling(self) -> None:
-        """Setup graceful shutdown on SIGINT/SIGTERM"""
-        def signal_handler(signum, frame):
-            logging.warning("Shutdown signal received. Cleaning up resources...")
-            self.shutdown_event.set()  # Signal threads to stop
-            self._cleanup()
-            sys.exit(0)
-
-        signal.signal(signal.SIGINT, signal_handler)
-        signal.signal(signal.SIGTERM, signal_handler)
-
-    def _cleanup(self):
-        """Clean up resources before shutting down."""
+        
         try:
-            logging.warning("Closing Spark session...")
-            self.pyspark_processor.spark.stop()
-            logging.warning("Closing consumer...")
-            self.consumer_instance.consumer.close()
-            logging.warning("Closing producer...")
-            self.producer.close()
-            logging.warning("Cleanup complete. Exiting.")
+            self.exe._execute_steps(steps, stage="parent")
         except Exception as e:
-            logging.error(f"Error during cleanup: {e}")
+            logging.error(f"Error in data extraction: {e}")
+            self.lifecycle_manager.shutdown_event.set()
+        finally:
+            self.lifecycle_manager._cleanup()
+
+    def _process_streaming_batch(self, send_batch):
+        """Manage batch processing for streaming data."""
+        if len(send_batch) >= self.config.batch_size:
+            logging.info(f"Sending batch data to {PySparkProcessor.__name__}...")
+            self.pyspark_processor.process_and_save(send_batch)
+            send_batch.clear()
+        return send_batch
