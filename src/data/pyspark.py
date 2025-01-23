@@ -8,8 +8,13 @@ from config.paths import Paths
 
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType, TimestampType
+from pyspark.sql import functions as F
+
 
 class PySparkProcessor:
+    """
+    Summary: Handles PySpark DataFrame schema definition and processing
+    """
     def __init__(
         self, ctx: PipelineContext,
         app_name: str,
@@ -23,6 +28,19 @@ class PySparkProcessor:
             .getOrCreate()
         )
 
+    def process_and_save(self, batch_data):
+        """Process batch data with PySpark and save to Parquet."""
+        schema = self.define_schema()
+        df = self.spark.createDataFrame(
+            batch_data,
+            schema=schema
+        )
+        processed_df = self.preprocess(df)
+        processed_df.show(truncate=True)
+        processed_df.write.mode(self.config.spark_write_mode).parquet(str(self.output_dir))
+        processed_df.unpersist()
+        self._log_dataframe_info(df)
+
     @staticmethod
     def define_schema():
         return StructType([
@@ -34,23 +52,26 @@ class PySparkProcessor:
             StructField("score", IntegerType(), True),
             StructField("parent_id", StringType(), True)
         ])
-
-    def process_and_save(self, batch_data):
-        """Process batch data with PySpark and save to Parquet."""
-        schema = self.define_schema()
-        df = self.spark.createDataFrame(
-            batch_data,
-            schema=schema
+        
+    def preprocess(self, df):
+        return (
+            df.withColumn(
+                "body_lowercase",
+                F.lower(F.col("body"))
+            )
+            .withColumn(
+                "comment_length",
+                F.length(F.col("body_lowercase"))
+            )
+            .withColumn(
+                "is_short_comment", 
+                F.when(F.length(F.col("body_lowercase")) < self.config.short_comment_threshold, True).otherwise(False)
+            )
         )
-        # df.show(truncate=False)
-        df.write.mode(self.config.spark_write_mode).parquet(str(self.output_dir))
-        df.unpersist()
-        # self._log_dataframe_info(df)
 
     def _log_dataframe_info(self, df):
         """Enhanced logging for DataFrame details"""
-        logging.info(f"DataFrame Schema: {df.schema}")
+        logging.info(f"DataFrame Schema: {df.printSchema()}")
         logging.info(f"DataFrame Partition Count: {df.rdd.getNumPartitions()}")
         logging.info(f"Number of Rows: {df.count()}")
         logging.info(f"Estimated Memory Usage: {df.storageLevel}")
-

@@ -25,7 +25,7 @@ class Config:
     
     batch_size:int = 5
     spark_write_mode: str = attr.ib(default="overwrite")
-
+    short_comment_threshold: int = 20
     kafka_topic: str = 'reddit_comments'
     subreddit_name: str = 'all'
     group_id: str = 'reddit_consumer_group'
