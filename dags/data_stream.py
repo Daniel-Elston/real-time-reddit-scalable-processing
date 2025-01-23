@@ -6,7 +6,9 @@ from datetime import timedelta
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 
-from src.pipeline import Pipeline
+from src.pipelines.extract_pipeline import ExtractionPipeline
+from config.pipeline_context import PipelineContext
+from utils.execution import TaskExecutor
 
 """
 SAMPLE DAG FILE:
@@ -32,7 +34,10 @@ dag = DAG(
 
 
 def stream_data():
-    Pipeline().kafka_stream()
+    ExtractionPipeline(
+        ctx = PipelineContext(),
+        exe = TaskExecutor()
+    ).extract_real_time_data()
 
 
 produce_task = PythonOperator(
@@ -40,3 +45,6 @@ produce_task = PythonOperator(
     python_callable=stream_data,
     dag=dag,
 )
+
+if __name__ == "__main__":
+    dag.cli()

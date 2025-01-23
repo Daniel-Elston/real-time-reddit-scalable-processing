@@ -19,8 +19,6 @@ from config.paths import Paths
 class Producer:
     def __init__(
         self, ctx: PipelineContext,
-        # bootstrap_servers: str,
-        # topic: str
     ):
         self.config: Config = ctx.settings.config
         self.paths: Paths = ctx.paths

@@ -32,16 +32,14 @@ class Consumer:
         )
         self.output_dir = self.paths.get_path("raw-extracted")
 
-    def process_messages(self, batch_size: int = 2) -> None:
+    def process_messages(self, batch_size: int = 100) -> None:
         """Process messages in batches for better performance"""
         messages = []
         try:
             for message in self.consumer:
-                # logging.warning(f"Processing message: {message.value}")
-                pprint(message.value)
                 messages.append(message.value)
                 
-                if len(messages) >= batch_size:
+                if len(messages) >= self.config.batch_size:
                     self._save_batch(messages)
                     messages = []
                     

@@ -24,8 +24,10 @@ class Config:
     overwrite: bool = attr.ib(default=True)
     save_fig: bool = attr.ib(default=True)
     
+    batch_size:int = 5
+    
     kafka_topic: str = 'reddit_comments'
-    subreddit_name: str = 'funny'
+    subreddit_name: str = 'all'
     group_id: str = 'reddit_consumer_group'
     
     kafka_bootstrap_servers: str = attr.ib(factory=kafka_bootstrap_servers)

@@ -28,8 +28,8 @@ class Extractor:
         max_tries=5
     )
 
-    def stream_comments(self) -> None:
-        """Stream comments with automatic retries and proper error handling"""
+    def stream_comments(self, callback):
+        """Stream comments with a callback for processing."""
         try:
             for comment in self.reddit.subreddit(
                 self.config.subreddit_name).stream.comments(skip_existing=True):
@@ -42,8 +42,8 @@ class Extractor:
                     score=comment.score,
                     parent_id=comment.parent_id
                 )
-                # callback(comment_data)
-                self.producer.send(comment_data)
+                # Use the callback to process the comment data
+                callback(comment_data)
         except Exception as e:
             logging.error(f"Fatal error in comment stream: {e}")
             raise

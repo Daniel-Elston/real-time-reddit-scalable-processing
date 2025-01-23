@@ -7,7 +7,11 @@ import attr
 
 paths_store = {
     # Raw
-    "raw-extracted": Path("data/temp/")
+    "raw-extracted": Path("data/raw/"),
+    # Spark
+    "spark-processed": Path("data/processed/"),
+    "dask-read": Path("data/processed/"),
+    "dask-write": Path("data/dask/")
     }
 
 @attr.s

@@ -115,7 +115,10 @@ def setup_logging(name, project_dir, log_file_name, config):
             },
         },
         "loggers": {
-            "conn": {"level": "WARNING", "handlers": ["console", "file"], "propagate": False},
+            "pyspark": {"level": "WARNING", "handlers": ["console", "file"], "propagate": False},
+            "org.apache.spark.SparkConf": {"level": "WARNING", "handlers": ["console", "file"], "propagate": False},
+            "java_gateway": {"level": "WARNING", "handlers": ["console", "file"], "propagate": False},
+            "clientserver": {"level": "WARNING", "handlers": ["console", "file"], "propagate": False},
             "praw": {"level": "WARNING", "handlers": ["console", "file"], "propagate": False},
             "prawcore": {"level": "WARNING", "handlers": ["console", "file"], "propagate": False},
             "sender": {"level": "WARNING", "handlers": ["console", "file"], "propagate": False},

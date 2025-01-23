@@ -2,4 +2,4 @@
 logging:
   root_level: DEBUG
   file_level: DEBUG
-  console_level: DEBUG
+  console_level: INFO

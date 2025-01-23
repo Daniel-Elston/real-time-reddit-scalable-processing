@@ -39,6 +39,8 @@ def initialize_project(
 
     # Initialize StateManager
     state_manager = PipelineContext()
+    state_manager.log_context()
+    
 
     # Initialize Executor
     exe = TaskExecutor(state_manager)

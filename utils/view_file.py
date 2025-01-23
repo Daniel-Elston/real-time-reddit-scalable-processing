@@ -6,22 +6,15 @@ from pathlib import Path
 from utils.file_access import FileAccess
 
 
-def view_file(filepath):
-    logging.info(FileAccess.load_file(filepath))
+from pyarrow.parquet import ParquetFile
 
-
-def view_dir_data(directory: Path, suffix: str):
-    file_store = [file for file in directory.rglob(f"*{suffix}") if file.is_file()]
-    for file in sorted(file_store):
-        x = FileAccess.load_file(file)
-        logging.info(x)
+def main():
+        
+    file_path = "data/processed/.part-00000-204a70f1-b4b8-49d1-a9a2-b1e64818d54d-c000.snappy.parquet.crc"
+    pf = ParquetFile(file_path)
+    if pf.metadata.num_rows == 0:
+        print("Parquet file is empty")
 
 
 if __name__ == "__main__":
-    logging.getLogger().setLevel(logging.DEBUG)
-
-    directory = Path("data/interim")
-    suffix = ".parquet"
-    # view_dir_data(directory, suffix)
-
-    view_file("data/db/load/uber.parquet")
+    main()
