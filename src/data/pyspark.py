@@ -22,11 +22,19 @@ class PySparkProcessor:
         self.config: Config = ctx.settings.config
         self.paths: Paths = ctx.paths
         self.output_dir = self.paths.get_path("spark-processed")
-        self.spark = (
-            SparkSession.builder
-            .appName(app_name)
+        # self.spark = (
+            # SparkSession.builder
+            # .appName(app_name)
+            # # .config("spark.driver.host", "10.255.255.254")
+            # .getOrCreate()
+        self.spark = SparkSession.builder \
+            .appName(app_name) \
+            .config("spark.driver.host", "10.255.255.254") \
+            .config("spark.hadoop.fs.defaultFS", "file:///") \
             .getOrCreate()
-        )
+        print(self.spark.conf.get("spark.hadoop.fs.defaultFS"))
+
+                # )
 
     def process_and_save(self, batch_data):
         """Process batch data with PySpark and save to Parquet."""
@@ -37,9 +45,15 @@ class PySparkProcessor:
         )
         processed_df = self.preprocess(df)
         processed_df.show(truncate=True)
-        processed_df.write.mode(self.config.spark_write_mode).parquet(str(self.output_dir))
-        processed_df.unpersist()
-        self._log_dataframe_info(df)
+        # skip if empty dataframe
+        if processed_df.count() == 0:
+            self._log_dataframe_info(df)
+            return
+        else:
+            # processed_df.write.mode(self.config.spark_write_mode).parquet(str(self.output_dir))
+            processed_df.write.mode(self.config.spark_write_mode).parquet("/home/delst-wsl/wsl-workspace/live-reddit-sentiment/data/processed2/")
+            processed_df.unpersist()
+            self._log_dataframe_info(df)
 
     @staticmethod
     def define_schema():

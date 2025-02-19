@@ -57,20 +57,3 @@ class NoDataDict(ApplyDataDict):
             "rename_mapping": {},
             "na_values": [],
         }
-
-
-class LogsDataDict(ApplyDataDict):
-    def __init__(self):
-        super().__init__()
-        self.data = {
-            "dtypes": {
-                "Datetime": "datetime",
-                "Exercise": str,
-                "logs": str,
-            },
-            "use_cols": ["Datetime", "Exercise", "logs"],
-            "rename_mapping": {
-                "Datetime": "datetime",
-                "Exercise": "exercise",
-            },
-        }

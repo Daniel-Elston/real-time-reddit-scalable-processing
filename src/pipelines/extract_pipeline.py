@@ -16,15 +16,15 @@ from src.etl.consume import Consumer
 
 from src.data.pyspark import PySparkProcessor
 from src.pipelines.life_cycle_manager import LifeCycleManager
+from src.base.base_pipeline import BasePipeline
 
 
-class ExtractionPipeline:
+class ExtractionPipeline(BasePipeline):
     def __init__(
         self, ctx: PipelineContext,
-        exe: TaskExecutor,
     ):
+        super().__init__(ctx)
         self.ctx = ctx
-        self.exe = exe
         self.config: Config = ctx.settings.config
         self.paths: Paths = ctx.paths
 
@@ -47,6 +47,7 @@ class ExtractionPipeline:
             consumer=self.consumer_instance,
             producer=self.producer
         )
+        
 
     def extract_real_time_data(self):
         """Process real-time data extraction and processing."""
@@ -64,7 +65,7 @@ class ExtractionPipeline:
         ]
         
         try:
-            self.exe._execute_steps(steps, stage="parent")
+            self._execute_steps(steps, stage="extraction")
         except Exception as e:
             logging.error(f"Error in data extraction: {e}")
             self.lifecycle_manager.shutdown_event.set()

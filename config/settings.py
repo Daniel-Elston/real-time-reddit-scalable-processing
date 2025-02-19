@@ -23,7 +23,7 @@ class Config:
     overwrite: bool = attr.ib(default=True)
     save_fig: bool = attr.ib(default=True)
     
-    batch_size:int = 5
+    batch_size:int = 20
     spark_write_mode: str = attr.ib(default="overwrite")
     short_comment_threshold: int = 20
     kafka_topic: str = 'reddit_comments'
@@ -48,7 +48,12 @@ class RedditCommentStructure:
 
 @attr.s
 class Params:
-    None
+    n_workers:int = attr.ib(default=1)
+    threads_per_worker:int = attr.ib(default=1)
+    npartitions: int = attr.ib(default=4)
+    chunk_size: int = attr.ib(default=100)
+    chunk_overlap: int = attr.ib(default=20)
+    model_name: str = attr.ib(default="sentence-transformers/all-MiniLM-L6-v2")
 
 
 @attr.s

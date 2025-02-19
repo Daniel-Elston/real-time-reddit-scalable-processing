@@ -9,9 +9,9 @@ paths_store = {
     # Raw
     "raw-extracted": Path("data/raw/"),
     # Spark
-    "spark-processed": Path("data/processed/"),
+    "spark-processed": Path("data/processed2/"),
     "dask-read": Path("data/processed/"),
-    "dask-write": Path("data/dask/")
+    "dask-out": Path("data/dask/ddf_processed.parquet")
     }
 
 @attr.s
