@@ -31,6 +31,7 @@ class PipelineFactory:
         self.ctx = ctx
         self.config: Config = ctx.settings.config
         self.operation: Literal["extract", "transform", "result"] = self.config.operation
+
         self.operation_map: dict[str, tuple[type, str]] = {
             "extract": (ExtractionPipeline, "extract_real_time_data"),
             "transform": (DaskPipeline, "distributed_process_and_store"),

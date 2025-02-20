@@ -1,8 +1,13 @@
 # README
 
+### Goal
+Build scalable text data processing pipelines for efficient model training with Dask and PySpark, utilising Apache Kafka for real-time data streaming.
+
+---
+
 ### Results
 1. Results can be found in the ``reports/result.xlsx`` file.
-2. This is partition number 2 of resultant dask processing 4 partitions.
+2. This is partition number 2 of resultant Dask processing 4 partitions.
 
 ---
 
