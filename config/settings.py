@@ -24,7 +24,7 @@ class Config:
     save_fig: bool = attr.ib(default=True)
     
     batch_size:int = 20
-    spark_write_mode: str = attr.ib(default="overwrite")
+    spark_write_mode: str = attr.ib(default="append")
     short_comment_threshold: int = 20
     kafka_topic: str = 'reddit_comments'
     subreddit_name: str = 'all'

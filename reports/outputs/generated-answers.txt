@@ -1,3 +1,0 @@
-=== Test Query ===
-Q: Give a summary of challenges in quantum computing.
-A: A long-standing challenge in quantum computing is developing technologies to overcome the in- evitable noise in qubits. To enable meaningful applications in the early stages of fault-tolerant quantum computing, devising methods to suppress post-correction logical failures is becoming in- creasingly crucial.

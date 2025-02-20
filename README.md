@@ -1,5 +1,9 @@
 # README
 
+### Results
+1. Results can be found in the ``reports/result.xlsx`` file.
+2. This is partition number 2 of resultant dask processing 4 partitions.
+
 ### **QRG:**
 
 1. Load up docker app

@@ -46,11 +46,22 @@ class ExtractionPipeline(BasePipeline):
     def extract_real_time_data(self):
         """Process real-time data extraction and processing."""
         send_batch = []
+        batch_lock = threading.Lock()
         
+        # def process_batch(batch_data): 
+        #     """Callback for processing individual comments."""
+        #     send_batch.append(batch_data)
+        #     return self._process_streaming_batch(send_batch)
         def process_batch(batch_data): 
             """Callback for processing individual comments."""
-            send_batch.append(batch_data)
-            return self._process_streaming_batch(send_batch)
+            with batch_lock:
+                send_batch.append(batch_data)
+                # Process batch when reaching the configured size
+                if len(send_batch) >= self.config.batch_size:
+                    logging.info(f"Batch size reached. Processing batch with {len(send_batch)} items.")
+                    self.pyspark_processor.process_and_save(send_batch)
+                    send_batch.clear()
+            return send_batch
 
         steps = [
             self.consumer_thread.start,

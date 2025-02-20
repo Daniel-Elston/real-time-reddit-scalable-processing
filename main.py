@@ -5,10 +5,8 @@ import logging
 from config.pipeline_context import PipelineContext
 from src.pipelines.extract_pipeline import ExtractionPipeline
 from src.pipelines.dask_pipeline import DaskPipeline
-from utils.execution import TaskExecutor
 from utils.project_setup import init_project
 from src.base.base_pipeline import BasePipeline
-from src.data.view_data import ViewData
 
 class MainPipeline:
     """ETL Pipeline main entry point."""
@@ -17,11 +15,10 @@ class MainPipeline:
 
     def run(self):
         steps = [
-            ExtractionPipeline(self.ctx).extract_real_time_data,
-            # DaskPipeline(self.ctx).run,
-            # ViewData(self.ctx).run
+            # ExtractionPipeline(self.ctx).extract_real_time_data,
+            DaskPipeline(self.ctx).distributed_process_and_store,
         ]
-        BasePipeline(ctx)._execute_steps(steps, stage="main")
+        BasePipeline(self.ctx)._execute_steps(steps, stage="main")
 
 
 if __name__ == "__main__":

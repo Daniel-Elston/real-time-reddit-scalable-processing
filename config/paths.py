@@ -10,9 +10,9 @@ paths_store = {
     "raw-extracted": Path("data/raw/"),
     # Spark
     "spark-processed": "/home/delst-wsl/wsl-workspace/live-reddit-sentiment/data/processed/",
-    "dask-read": Path("data/processed/"),
-    "dask-out": Path("data/dask/ddf_processed.parquet")
-    }
+    "dask-input": "/home/delst-wsl/wsl-workspace/live-reddit-sentiment/data/processed/",
+    "dask-output": "/home/delst-wsl/wsl-workspace/live-reddit-sentiment/data/dask/ddf_p.parquet"
+}
 
 @attr.s
 class Paths:
