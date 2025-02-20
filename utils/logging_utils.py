@@ -5,7 +5,20 @@ import time
 from functools import wraps
 from pathlib import Path
 from pprint import pformat
-from typing import Callable, List, Optional, Union
+from typing import Callable
+from typing import List
+from typing import Optional
+from typing import Union
+
+
+def log_pipeline_factory(cls, pipeline_instance: object, operation_method: Callable) -> None:
+    """Log execution context details using the pipeline instance."""
+    logging.info(
+        f"{cls.__class__.__name__} executing with parameters:\n"
+        f"CONFIG OPERATION ENTRY: {pipeline_instance.config.operation}\n"
+        f"INITIATING: {operation_method.__qualname__}\n"
+        f"{'=' * 125}\n"
+    )
 
 
 def log_cls_methods(cls):

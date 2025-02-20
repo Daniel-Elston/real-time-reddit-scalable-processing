@@ -48,10 +48,6 @@ class ExtractionPipeline(BasePipeline):
         send_batch = []
         batch_lock = threading.Lock()
         
-        # def process_batch(batch_data): 
-        #     """Callback for processing individual comments."""
-        #     send_batch.append(batch_data)
-        #     return self._process_streaming_batch(send_batch)
         def process_batch(batch_data): 
             """Callback for processing individual comments."""
             with batch_lock:

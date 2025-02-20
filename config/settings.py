@@ -4,6 +4,7 @@ import os
 import attr
 from typing import Optional
 from datetime import datetime
+from typing import Literal
 
 
 def kafka_bootstrap_servers():
@@ -18,8 +19,10 @@ def reddit_creds():
         'password': os.getenv('REDDIT_PASSWORD'),
     }
 
+
 @attr.s
 class Config:
+    operation: Literal["extract", "transform", "result"] = "result"
     overwrite: bool = attr.ib(default=True)
     save_fig: bool = attr.ib(default=True)
     
@@ -49,8 +52,8 @@ class RedditCommentStructure:
 
 @attr.s
 class Params:
-    n_workers:int = attr.ib(default=1)
-    threads_per_worker:int = attr.ib(default=1)
+    n_workers: int = attr.ib(default=1)
+    threads_per_worker: int = attr.ib(default=1)
     npartitions: int = attr.ib(default=4)
     chunk_size: int = attr.ib(default=100)
     chunk_overlap: int = attr.ib(default=20)

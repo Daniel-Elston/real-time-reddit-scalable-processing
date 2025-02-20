@@ -1,12 +1,11 @@
 from __future__ import annotations
 
-import logging
 import logging.config
 import multiprocessing
-from functools import partial
 from pathlib import Path
 
 import colorlog
+
 
 # Custom log level
 FILE_TRACK = 15
@@ -115,27 +114,14 @@ def setup_logging(name, project_dir, log_file_name, config):
             },
         },
         "loggers": {
-            "pyspark": {"level": "WARNING", "handlers": ["console", "file"], "propagate": False},
-            "org.apache.spark.SparkConf": {"level": "WARNING", "handlers": ["console", "file"], "propagate": False},
-            "java_gateway": {"level": "WARNING", "handlers": ["console", "file"], "propagate": False},
-            "clientserver": {"level": "WARNING", "handlers": ["console", "file"], "propagate": False},
-            "praw": {"level": "WARNING", "handlers": ["console", "file"], "propagate": False},
-            "prawcore": {"level": "WARNING", "handlers": ["console", "file"], "propagate": False},
-            "sender": {"level": "WARNING", "handlers": ["console", "file"], "propagate": False},
             "urllib3": {"level": "WARNING", "handlers": ["console", "file"], "propagate": False},
-            "sessions": {"level": "WARNING", "handlers": ["console", "file"], "propagate": False},
-            "kafka": {"level": "WARNING", "handlers": ["console", "file"], "propagate": False},
-            "kafka.conn": {"level": "WARNING", "handlers": ["console", "file"], "propagate": False},
-            "kafka.consumer": {"level": "WARNING", "handlers": ["console", "file"], "propagate": False},
-            "kafka.producer": {"level": "WARNING", "handlers": ["console", "file"], "propagate": False},
-            "langchain_community.document_loaders": {"level": "WARNING","handlers": ["console", "file"],"propagate": False},
+            "langchain_community.document_loaders": {"level": "WARNING", "handlers": ["console", "file"], "propagate": False},
             "requests": {"level": "WARNING", "handlers": ["console", "file"], "propagate": False},
             "__init__": {"level": "WARNING", "handlers": ["console", "file"], "propagate": False},
             "PIL": {"level": "WARNING", "handlers": ["console", "file"], "propagate": False},
             "pyplot": {"level": "WARNING", "handlers": ["console", "file"], "propagate": False},
-            "matplotlib": {"level": "WARNING","handlers": ["console", "file"],"propagate": False},
-            "matplotlib.font_manager": {"level": "WARNING","handlers": ["console", "file"],"propagate": False},
-            "sessions": {"level": "WARNING", "handlers": ["console", "file"], "propagate": False},
+            "matplotlib": {"level": "WARNING", "handlers": ["console", "file"], "propagate": False},
+            "matplotlib.font_manager": {"level": "WARNING", "handlers": ["console", "file"], "propagate": False},
         },
         "root": {
             "level": root_level,

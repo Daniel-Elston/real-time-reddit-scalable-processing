@@ -55,7 +55,7 @@ class DaskDataHandler:
         logging.info(f"{"=" * 62}\n")
 
 
-    def read_result(self, part_n):
+    def read_result(self, part_n=0):
         try:
             read_path = f'/home/delst-wsl/wsl-workspace/live-reddit-sentiment/data/dask/ddf_p.parquet/part.{part_n}.parquet'
             result_path = 'reports/result.xlsx'

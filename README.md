@@ -4,14 +4,17 @@
 1. Results can be found in the ``reports/result.xlsx`` file.
 2. This is partition number 2 of resultant dask processing 4 partitions.
 
+---
+
 ### **QRG:**
 
 1. Load up docker app
 2. Load 2 separate WSL terminals (T1 and T2)
 3. In T1, run ``docker-compose up --build``
-4. Once all images are running, in T2, run ``python main.py``
-5. Data is streamed in temrinal but also saved: ``data/temp/reddit_comments.json``
-6. Sample result of PySpark and Dask processing can be found as SDOs in ``data/results/*.xlsx``
+4. Open file ``config/settings`` and adjust the Config to either 'extract', 'transform' or 'results'
+5. Once all images are running, in T2, run ``python main.py``
+6. Data is streamed in temrinal but also saved: ``data/temp/reddit_comments.json``
+7. Sample result of PySpark and Dask processing can be found as SDOs in ``data/results/*.xlsx``
 
 ---
 
