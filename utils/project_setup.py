@@ -8,7 +8,6 @@ import dotenv
 import yaml
 
 from config.pipeline_context import PipelineContext
-from utils.execution import TaskExecutor
 from utils.logging_config import setup_logging
 
 
@@ -38,14 +37,9 @@ def initialize_project(
     setup_logging("DataPipeline", project_dir, log_filename, project_config)
 
     # Initialize StateManager
-    state_manager = PipelineContext()
-    state_manager.log_context()
-    
+    project_ctx = PipelineContext()
 
-    # Initialize Executor
-    exe = TaskExecutor(state_manager)
-
-    return project_dir, project_config, state_manager, exe
+    return project_dir, project_config, project_ctx
 
 
 def get_logger(name: str) -> logging.Logger:
@@ -55,12 +49,6 @@ def get_logger(name: str) -> logging.Logger:
 
 def init_project() -> Tuple[Path, dict, PipelineContext]:
     """Set up project environment, configuration, logging, and StateManager."""
-    project_dir, project_config, state_manager, exe = initialize_project()
+    project_dir, project_config, project_ctx = initialize_project()
     logging.getLogger().setLevel(logging.DEBUG)
-    return project_dir, project_config, state_manager, exe
-
-
-if __name__ == "__main__":
-    project_dir, project_config, state_manager, db_manager = init_project()
-    logging.info("Project setup completed successfully.")
-    logging.debug(f"StateManager initialized with: {state_manager}")
+    return project_dir, project_config, project_ctx

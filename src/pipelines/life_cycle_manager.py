@@ -5,7 +5,6 @@ import signal
 import sys
 import threading
 
-from src.etl.extract import Extractor
 from src.etl.produce import Producer
 from src.etl.consume import Consumer
 

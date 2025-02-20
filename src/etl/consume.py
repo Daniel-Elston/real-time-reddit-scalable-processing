@@ -8,11 +8,8 @@ import json
 from config.settings import Config
 from config.paths import Paths
 
-from pathlib import Path
-from typing import Optional
 from kafka import KafkaConsumer
 from datetime import datetime
-from pprint import pprint
 
 
 class Consumer:

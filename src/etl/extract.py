@@ -10,17 +10,14 @@ import backoff
 import praw
 
 from datetime import datetime
-from src.etl.produce import Producer
 
 
 class Extractor:
     def __init__(
         self, ctx: PipelineContext,
-        producer: Producer,
     ):
         self.config: Config = ctx.settings.config
         self.reddit = praw.Reddit(**self.config.reddit_creds)
-        self.producer: Producer = producer
 
     @backoff.on_exception(
         backoff.expo,

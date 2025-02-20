@@ -17,15 +17,15 @@ class MainPipeline:
 
     def run(self):
         steps = [
-            # ExtractionPipeline(self.ctx).extract_real_time_data,
+            ExtractionPipeline(self.ctx).extract_real_time_data,
             # DaskPipeline(self.ctx).run,
-            ViewData(self.ctx).run
+            # ViewData(self.ctx).run
         ]
         BasePipeline(ctx)._execute_steps(steps, stage="main")
 
 
 if __name__ == "__main__":
-    project_dir, project_config, ctx, exe = init_project()
+    project_dir, project_config, ctx = init_project()
     try:
         logging.info(f"Beginning Top-Level Pipeline from ``main.py``...\n{"=" * 125}")
         MainPipeline(ctx).run()

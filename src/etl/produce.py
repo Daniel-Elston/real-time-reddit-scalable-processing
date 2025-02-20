@@ -8,12 +8,8 @@ from config.settings import RedditCommentStructure
 from kafka import KafkaProducer
 import attr
 
-from config.settings import Config
-from config.paths import Paths
-
 from config.pipeline_context import PipelineContext
 from config.settings import Config
-from config.paths import Paths
 
 
 class Producer:
@@ -21,7 +17,6 @@ class Producer:
         self, ctx: PipelineContext,
     ):
         self.config: Config = ctx.settings.config
-        self.paths: Paths = ctx.paths
         
         self.producer = KafkaProducer(
             bootstrap_servers=self.config.kafka_bootstrap_servers,

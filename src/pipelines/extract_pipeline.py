@@ -5,9 +5,7 @@ import logging
 import threading
 
 from config.pipeline_context import PipelineContext
-from utils.execution import TaskExecutor
 from config.settings import Config
-from config.paths import Paths
 
 
 from src.etl.extract import Extractor
@@ -26,21 +24,17 @@ class ExtractionPipeline(BasePipeline):
         super().__init__(ctx)
         self.ctx = ctx
         self.config: Config = ctx.settings.config
-        self.paths: Paths = ctx.paths
 
         self.producer = Producer(ctx=ctx)
         self.consumer_instance = Consumer(ctx=ctx)
-        self.extractor = Extractor(
-            ctx=ctx,
-            producer=self.producer,
-        )
+        self.extractor = Extractor(ctx=ctx)
         self.consumer_thread = threading.Thread(
             target=self.consumer_instance.process_messages,
             daemon=True
         )
         self.pyspark_processor = PySparkProcessor(
             ctx=ctx,
-            app_name="RedditPipeline",
+            app_name=self.config.app_name,
         )
         self.lifecycle_manager = LifeCycleManager(
             spark_processor=self.pyspark_processor,
@@ -75,7 +69,8 @@ class ExtractionPipeline(BasePipeline):
     def _process_streaming_batch(self, send_batch):
         """Manage batch processing for streaming data."""
         if len(send_batch) >= self.config.batch_size:
-            logging.info(f"Sending batch data to {PySparkProcessor.__name__}...")
+            logging.info(
+                f"Sending batch data to {self.pyspark_processor.__class__.__name__}...")
             self.pyspark_processor.process_and_save(send_batch)
             send_batch.clear()
         return send_batch

@@ -29,6 +29,7 @@ class Config:
     kafka_topic: str = 'reddit_comments'
     subreddit_name: str = 'all'
     group_id: str = 'reddit_consumer_group'
+    app_name:str = attr.ib(default="RedditPipeline")
     
     kafka_bootstrap_servers: str = attr.ib(factory=kafka_bootstrap_servers)
     reddit_creds: dict = attr.ib(factory=reddit_creds)

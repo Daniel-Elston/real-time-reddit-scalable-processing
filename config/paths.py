@@ -9,7 +9,7 @@ paths_store = {
     # Raw
     "raw-extracted": Path("data/raw/"),
     # Spark
-    "spark-processed": Path("data/processed2/"),
+    "spark-processed": "/home/delst-wsl/wsl-workspace/live-reddit-sentiment/data/processed/",
     "dask-read": Path("data/processed/"),
     "dask-out": Path("data/dask/ddf_processed.parquet")
     }
