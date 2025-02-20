@@ -6,8 +6,8 @@ from datetime import timedelta
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 
-from src.pipelines.extract_pipeline import ExtractionPipeline
 from config.pipeline_context import PipelineContext
+from src.pipelines.extract_pipeline import ExtractionPipeline
 from utils.execution import TaskExecutor
 
 """
@@ -35,8 +35,8 @@ dag = DAG(
 
 def stream_data():
     ExtractionPipeline(
-        ctx = PipelineContext(),
-        exe = TaskExecutor()
+        ctx=PipelineContext(),
+        exe=TaskExecutor()
     ).extract_real_time_data()
 
 

@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Dict, Optional, Union
+from typing import Dict
+from typing import Optional
+from typing import Union
 
 import attr
 
@@ -10,9 +12,13 @@ paths_store = {
     "raw-extracted": Path("data/raw/"),
     # Spark
     "spark-processed": "/home/delst-wsl/wsl-workspace/live-reddit-sentiment/data/processed/",
+    # Dask
     "dask-input": "/home/delst-wsl/wsl-workspace/live-reddit-sentiment/data/processed/",
-    "dask-output": "/home/delst-wsl/wsl-workspace/live-reddit-sentiment/data/dask/ddf_p.parquet"
+    "dask-output": "/home/delst-wsl/wsl-workspace/live-reddit-sentiment/data/dask/ddf_p.parquet",
+    # Result
+    "result": Path("reports/result.xlsx")
 }
+
 
 @attr.s
 class Paths:

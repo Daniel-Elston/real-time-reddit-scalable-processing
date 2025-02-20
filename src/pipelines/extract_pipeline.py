@@ -1,20 +1,16 @@
 from __future__ import annotations
 
 import logging
-
 import threading
 
 from config.pipeline_context import PipelineContext
 from config.settings import Config
-
-
+from src.base.base_pipeline import BasePipeline
+from src.data.pyspark import PySparkProcessor
+from src.etl.consume import Consumer
 from src.etl.extract import Extractor
 from src.etl.produce import Producer
-from src.etl.consume import Consumer
-
-from src.data.pyspark import PySparkProcessor
 from src.pipelines.life_cycle_manager import LifeCycleManager
-from src.base.base_pipeline import BasePipeline
 
 
 class ExtractionPipeline(BasePipeline):
@@ -41,14 +37,13 @@ class ExtractionPipeline(BasePipeline):
             consumer=self.consumer_instance,
             producer=self.producer
         )
-        
 
     def extract_real_time_data(self):
         """Process real-time data extraction and processing."""
         send_batch = []
         batch_lock = threading.Lock()
-        
-        def process_batch(batch_data): 
+
+        def process_batch(batch_data):
             """Callback for processing individual comments."""
             with batch_lock:
                 send_batch.append(batch_data)
@@ -64,7 +59,7 @@ class ExtractionPipeline(BasePipeline):
             lambda: self.extractor.stream_comments(callback=process_batch),
             self.consumer_thread.join,
         ]
-        
+
         try:
             self._execute_steps(steps, stage="extraction")
         except Exception as e:

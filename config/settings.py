@@ -1,14 +1,16 @@
 from __future__ import annotations
 
 import os
-import attr
-from typing import Optional
 from datetime import datetime
 from typing import Literal
+from typing import Optional
+
+import attr
 
 
 def kafka_bootstrap_servers():
     return os.getenv('KAFKA_BROKER_URL')
+
 
 def reddit_creds():
     return {
@@ -25,15 +27,15 @@ class Config:
     operation: Literal["extract", "transform", "result"] = "result"
     overwrite: bool = attr.ib(default=True)
     save_fig: bool = attr.ib(default=True)
-    
-    batch_size:int = 20
+
+    batch_size: int = 20
     spark_write_mode: str = attr.ib(default="append")
     short_comment_threshold: int = 20
     kafka_topic: str = 'reddit_comments'
     subreddit_name: str = 'all'
     group_id: str = 'reddit_consumer_group'
-    app_name:str = attr.ib(default="RedditPipeline")
-    
+    app_name: str = attr.ib(default="RedditPipeline")
+
     kafka_bootstrap_servers: str = attr.ib(factory=kafka_bootstrap_servers)
     reddit_creds: dict = attr.ib(factory=reddit_creds)
 

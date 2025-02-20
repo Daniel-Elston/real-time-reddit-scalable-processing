@@ -2,12 +2,11 @@ from __future__ import annotations
 
 import json
 
-from config.pipeline_context import PipelineContext
-from config.settings import Params
-
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_huggingface import HuggingFaceEmbeddings
 
+from config.pipeline_context import PipelineContext
+from config.settings import Params
 
 
 class Chunker:

@@ -1,15 +1,14 @@
 from __future__ import annotations
 
+import json
 import logging
 
-from typing import Any
-import json
-from config.settings import RedditCommentStructure
-from kafka import KafkaProducer
 import attr
+from kafka import KafkaProducer
 
 from config.pipeline_context import PipelineContext
 from config.settings import Config
+from config.settings import RedditCommentStructure
 
 
 class Producer:
@@ -17,7 +16,7 @@ class Producer:
         self, ctx: PipelineContext,
     ):
         self.config: Config = ctx.settings.config
-        
+
         self.producer = KafkaProducer(
             bootstrap_servers=self.config.kafka_bootstrap_servers,
             value_serializer=lambda x: json.dumps(x, default=str).encode('utf-8'),

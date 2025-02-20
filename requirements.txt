@@ -1,3 +1,6 @@
+# Editable install with no version control (src==0.0.1)
+# -e /home/de-wsl/wsl-workspace/live-reddit-sentiment
+-e /home/delst-wsl/wsl-workspace/live-reddit-sentiment
 attr==0.3.2
 attrs==24.3.0
 backoff==2.2.1
@@ -35,9 +38,6 @@ seaborn==0.13.2
 setuptools==75.1.0
 six==1.17.0
 SQLAlchemy==2.0.37
-# Editable install with no version control (src==0.0.1)
-# -e /home/de-wsl/wsl-workspace/live-reddit-sentiment
--e /home/delst-wsl/wsl-workspace/live-reddit-sentiment
 structures==0.9.5
 typing_extensions==4.12.2
 tzdata==2025.1

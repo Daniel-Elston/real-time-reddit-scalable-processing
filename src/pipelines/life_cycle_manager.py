@@ -5,29 +5,29 @@ import signal
 import sys
 import threading
 
-from src.etl.produce import Producer
-from src.etl.consume import Consumer
-
 from src.data.pyspark import PySparkProcessor
+from src.etl.consume import Consumer
+from src.etl.produce import Producer
 
 
 class LifeCycleManager:
     """
-    Manages lifecycle events for data processing pipelines, 
+    Manages lifecycle events for data processing pipelines,
     including graceful shutdown and resource cleanup.
     """
+
     def __init__(
-        self, 
-        spark_processor: PySparkProcessor = None, 
-        consumer: Consumer = None, 
+        self,
+        spark_processor: PySparkProcessor = None,
+        consumer: Consumer = None,
         producer: Producer = None
     ):
         self.spark_processor = spark_processor
         self.consumer = consumer
         self.producer = producer
-        
+
         self.shutdown_event = threading.Event()
-        
+
         self._setup_signal_handling()
 
     def _setup_signal_handling(self) -> None:
@@ -46,7 +46,7 @@ class LifeCycleManager:
 
     def _cleanup(self):
         """
-        Systematically clean up resources to ensure 
+        Systematically clean up resources to ensure
         graceful shutdown of pipeline components.
         """
         cleanup_steps = [

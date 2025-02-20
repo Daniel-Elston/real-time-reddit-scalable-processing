@@ -2,17 +2,22 @@ from __future__ import annotations
 
 import logging
 
+from pyspark.sql import functions as F
+from pyspark.sql import SparkSession
+from pyspark.sql.types import IntegerType
+from pyspark.sql.types import StringType
+from pyspark.sql.types import StructField
+from pyspark.sql.types import StructType
+from pyspark.sql.types import TimestampType
+
+from config.paths import Paths
 from config.pipeline_context import PipelineContext
 from config.settings import Config
-from config.paths import Paths
-
-from pyspark.sql import SparkSession
-from pyspark.sql.types import StructType, StructField, StringType, IntegerType, TimestampType
-from pyspark.sql import functions as F
 
 
 class PySparkProcessor:
     """Summary: Handles PySpark DataFrame schema definition and processing"""
+
     def __init__(
         self, ctx: PipelineContext,
         app_name: str,
@@ -25,7 +30,6 @@ class PySparkProcessor:
             .config("spark.driver.host", "10.255.255.254") \
             .config("spark.hadoop.fs.defaultFS", "file:///") \
             .getOrCreate()
-
 
     def process_and_save(self, batch_data):
         """Process batch data with PySpark and save to Parquet."""
@@ -55,7 +59,7 @@ class PySparkProcessor:
             StructField("score", IntegerType(), True),
             StructField("parent_id", StringType(), True)
         ])
-        
+
     def preprocess(self, df):
         return (
             df.withColumn(
@@ -67,7 +71,7 @@ class PySparkProcessor:
                 F.length(F.col("body_lowercase"))
             )
             .withColumn(
-                "is_short_comment", 
+                "is_short_comment",
                 F.when(F.length(F.col("body_lowercase")) < self.config.short_comment_threshold, True).otherwise(False)
             )
         )

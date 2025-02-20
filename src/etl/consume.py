@@ -1,15 +1,14 @@
 from __future__ import annotations
 
-import logging
-
-from config.pipeline_context import PipelineContext
 import json
-
-from config.settings import Config
-from config.paths import Paths
+import logging
+from datetime import datetime
 
 from kafka import KafkaConsumer
-from datetime import datetime
+
+from config.paths import Paths
+from config.pipeline_context import PipelineContext
+from config.settings import Config
 
 
 class Consumer:
@@ -18,7 +17,7 @@ class Consumer:
     ):
         self.config: Config = ctx.settings.config
         self.paths: Paths = ctx.paths
-        
+
         self.consumer = KafkaConsumer(
             self.config.kafka_topic,
             bootstrap_servers=self.config.kafka_bootstrap_servers,
@@ -35,11 +34,11 @@ class Consumer:
         try:
             for message in self.consumer:
                 messages.append(message.value)
-                
+
                 if len(messages) >= self.config.batch_size:
                     self._save_batch(messages)
                     messages = []
-                    
+
         except Exception as e:
             logging.error(f"Error processing messages: {e}")
             if messages:  # Save any remaining messages
@@ -50,6 +49,6 @@ class Consumer:
 
     def _save_batch(self, messages: list) -> None:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        output_file = self.output_dir / f"reddit_comments_{timestamp}.json"        
+        output_file = self.output_dir / f"reddit_comments_{timestamp}.json"
         with output_file.open('w') as f:
             json.dump(messages, f, indent=2)

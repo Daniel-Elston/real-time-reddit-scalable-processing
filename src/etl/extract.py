@@ -1,15 +1,14 @@
 from __future__ import annotations
 
 import logging
-
-from config.pipeline_context import PipelineContext
-from config.settings import Config
-from config.settings import RedditCommentStructure
+from datetime import datetime
 
 import backoff
 import praw
 
-from datetime import datetime
+from config.pipeline_context import PipelineContext
+from config.settings import Config
+from config.settings import RedditCommentStructure
 
 
 class Extractor:
@@ -24,12 +23,11 @@ class Extractor:
         (praw.exceptions.PRAWException, Exception),
         max_tries=5
     )
-
     def stream_comments(self, callback):
         """Stream comments with a callback for processing."""
         try:
             for comment in self.reddit.subreddit(
-                self.config.subreddit_name).stream.comments(skip_existing=True):
+                    self.config.subreddit_name).stream.comments(skip_existing=True):
                 comment_data = RedditCommentStructure(
                     comment_id=comment.id,
                     body=comment.body,

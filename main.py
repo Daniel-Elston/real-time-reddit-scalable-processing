@@ -3,12 +3,13 @@ from __future__ import annotations
 import logging
 
 from config.pipeline_context import PipelineContext
-from utils.project_setup import init_project
 from src.pipelines.pipeline_factory import PipelineFactory
+from utils.project_setup import init_project
 
 
 class MainPipeline:
     """ETL Pipeline main entry point."""
+
     def __init__(self, ctx: PipelineContext):
         self.ctx = ctx
 
