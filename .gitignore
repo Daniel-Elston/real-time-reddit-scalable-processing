@@ -4,7 +4,6 @@ checkpoints
 commit-msg.txt
 notebooks/*
 data/*
-src/pipelines/dask_pipeline.py
 log/*
 # Byte-compiled / optimized / DLL files
 __pycache__/
